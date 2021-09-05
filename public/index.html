@@ -1,22 +1,38 @@
 <html>
 <head>
 	<title>Cross-Site Scripting (XSS)</title>
+	<style>
+		input[type=text] {
+  			width: 230px;
+			margin-right: 10px;
+			height: 40px;
+ 			 -webkit-transition: width 0.4s ease-in-out;
+  			transition: width 0.4s ease-in-out;
+		}
+
+		input[type=text]:focus {
+  			width: 300px;
+		}
+
+
+	</style>
 </head>
 <body>
-
-	<form action="" method="GET">
+	<div style="display: flex;width: 100%; justify-content: center;margin: 20px 0;">
+		<form action="" method="GET">
 		
-		<input type="text" name="q">
-		<input type="submit" value="Search">
-	</form>
-
+			<input type="text" name="q">
+			<input style="height: 40px;" type="submit" value="Search">
+		</form>
+		
+	</div>
+	<div style=" justify-content: center;margin: 20px 0;" id="results"></div>
 	
-	<div id="results"></div>
+	
 
 	<script>
 		document.addEventListener('DOMContentLoaded', function() {
 
-			
 			var q = getQueryParameter('q');
 
 			if (q) {
@@ -31,9 +47,9 @@
 
 			
 			var results = [
-				'Result #1',
-				'Result #2',
-				'Result #3'
+				'Swimming',
+				'Racing',
+				'Running'
 			];
 
 			callback(null, results);
@@ -44,21 +60,22 @@
 			var resultsEl = document.querySelector('#results');
 			var html = '';
 
-			html += '<p>Your search query:</p>';
-			html += '<pre>' + q + '</pre>';
-			html += '<ul>';
+			html += '<p>Your search query:</p>' + '<pre>' + q + '</pre>' + '<ul>';
+			 
 
 			for (var index = 0; index < results.length; index++) {
 				html += '<li>' + results[index] + '</li>';
 			}
 
 			html += '</ul>';
-
 			resultsEl.innerHTML = html;
 		}
 
 		function getQueryParameter(name) {
-
+			
+			// const urlParams = new URLSearchParams(window.location.search);
+			// const myParam = urlParams.get(name);
+			// return myParam;
 			var pairs = window.location.search.substring(1).split('&');
 			var pair;
 
@@ -70,7 +87,6 @@
 					return decodeURIComponent(pair[1]);
 				}
 			}
-
 			return false;
 		}
 	</script>
